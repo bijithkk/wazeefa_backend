@@ -7,10 +7,16 @@ const StaffSchema = new mongoose.Schema(
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true, select: false },
     role: { type: String, default: "staff" },
+    permissions: {
+        view: { type: Boolean, default: false },
+        create: { type: Boolean, default: false },
+        edit: { type: Boolean, default: false },
+        delete: { type: Boolean, default: false }
+    },
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Superadmin"
-    },
+    }
   },
   { timestamps: true }
 );

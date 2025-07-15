@@ -8,6 +8,7 @@ import superAdminStaffRoutes from './src/routes/superadmin/staff/staffRoutes.js'
 
 // staff
 import staffAuthRoutes from './src/routes/staff/auth/authRoutes.js';
+import staffStudentRoutes from './src/routes/staff/student/studentRoutes.js';
 
 // APP config
 const app = express();
@@ -25,6 +26,7 @@ app.use('/superadmin/staff', superAdminStaffRoutes);
 
 // staff
 app.use('/staff/auth', staffAuthRoutes);
+app.use('/staff/student', staffStudentRoutes);
 
 // error handling
 app.use((err, req, res, next) => {
