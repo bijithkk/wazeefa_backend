@@ -3,6 +3,8 @@ import cors from 'cors';
 
 // super admin
 import superAdminAuthRoutes from './src/routes/superadmin/auth/authRoutes.js';
+import superAdminStudentRoutes from './src/routes/superadmin/student/studentRoutes.js';
+import superAdminStaffRoutes from './src/routes/superadmin/staff/staffRoutes.js';
 
 // staff
 import staffAuthRoutes from './src/routes/staff/auth/authRoutes.js';
@@ -18,6 +20,8 @@ app.use(express.json());
 
 // super admin
 app.use('/superadmin/auth', superAdminAuthRoutes);
+app.use('/superadmin/student', superAdminStudentRoutes);
+app.use('/superadmin/staff', superAdminStaffRoutes);
 
 // staff
 app.use('/staff/auth', staffAuthRoutes);
