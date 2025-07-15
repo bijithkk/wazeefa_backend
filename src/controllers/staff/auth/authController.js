@@ -3,38 +3,6 @@ import { generateAccessToken } from "../../../utils/token.js";
 import AppError from "../../../utils/appError.js";
 import catchAsync from "../../../utils/catchAsync.js";
 
-export const signup = catchAsync(async (req, res, next) => {
-    const {
-        username,
-        email,
-        password,
-        passwordConfirm,
-    } = req.body;
-
-    const existingStaff = await Staff.findOne({ email });
-    if (existingStaff) {
-        return next(new AppError("Staff already exists", 409));
-    }
-
-    const newStaff = await Staff.create({
-        username,
-        email,
-        password,
-        passwordConfirm,
-    });
-
-    const newStaffObj = newStaff.toObject();
-    delete newStaffObj.password;
-
-    res.status(201).json({
-        status: true,
-        message: "SignUp successful",
-        data: {
-            Staff: newStaffObj,
-        },
-    });
-});
-
 export const login = catchAsync(async (req, res, next) => {
     const { email, password } = req.body;
 
