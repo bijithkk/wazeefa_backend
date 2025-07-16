@@ -25,23 +25,36 @@ export const createStaff = catchAsync(async (req, res, next) => {
 });
 
 export const updateStaff = catchAsync(async (req, res, next) => {
-    let updateData = { ...req.body };
-
-    if (updateData.permissions) {
-        for (const key in updateData.permissions) {
-            updateData[`permissions.${key}`] = updateData.permissions[key];
-        }
-        delete updateData.permissions;
-    }
-
-    const staff = await Staff.findByIdAndUpdate(
-        req.params.id,
-        updateData,
-        { new: true, runValidators: true }
-    );
+    const staff = await Staff.findById(req.params.id);
     if (!staff) {
         return next(new AppError('Staff not found', 404));
     }
+
+    for (const key in req.body) {
+        if (key !== 'password' && key !== 'passwordConfirm' && key !== 'permissions') {
+            staff[key] = req.body[key];
+        }
+    }
+
+    if (req.body.password || req.body.passwordConfirm) {
+        if (!req.body.password || !req.body.passwordConfirm) {
+            return next(new AppError('Both password and passwordConfirm are required to update password.', 400));
+        }
+        if (req.body.password !== req.body.passwordConfirm) {
+            return next(new AppError('Passwords do not match.', 400));
+        }
+        staff.password = req.body.password;
+        staff.passwordConfirm = req.body.passwordConfirm;
+    }
+
+    if (req.body.permissions) {
+        for (const key in req.body.permissions) {
+            staff.permissions[key] = req.body.permissions[key];
+        }
+    }
+
+    await staff.save();
+
     const staffObj = staff.toObject();
     delete staffObj.password;
     res.status(200).json({
